@@ -1,1 +1,19 @@
-abc
+import networkx as nx
+
+# 构建图结构数据
+G = nx.DiGraph()  # 如果是有向图，使用 DiGraph
+
+# 添加节点，带有权重（图数型数据）
+G.add_node(1, weight=10)
+G.add_node(2, weight=20)
+G.add_node(3, weight=15)
+G.add_node(4, weight=25)
+
+# 添加边，带有权重
+G.add_edge(1, 2, weight=1.5)
+G.add_edge(1, 3, weight=2.0)
+G.add_edge(2, 4, weight=3.5)
+G.add_edge(3, 4, weight=1.0)
+
+# 输出图的信息
+print(nx.info(G))
