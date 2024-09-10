@@ -32,3 +32,27 @@ nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['weight'] for u, v, 
 
 plt.title("嵌套的流程关系图")
 plt.show()
+
+
+# 使用力导向布局算法 (Fruchterman-Reingold)
+pos = nx.spring_layout(G)  # spring_layout 使用 Fruchterman-Reingold 算法
+
+# 绘制图形
+nx.draw(G, pos, with_labels=True, node_size=2000, node_color='lightgreen', font_size=10, font_weight='bold')
+nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['weight'] for u, v, d in G.edges(data=True)})
+
+plt.title("任意关系图 - 力导向布局")
+plt.show()
+
+
+
+
+# 调整 k 值（节点距离）和 iterations（迭代次数）进行优化
+pos = nx.spring_layout(G, k=0.5, iterations=50)
+
+# 绘制图形
+nx.draw(G, pos, with_labels=True, node_size=2000, node_color='lightcoral', font_size=10, font_weight='bold')
+nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['weight'] for u, v, d in G.edges(data=True)})
+
+plt.title("优化后的任意关系图")
+plt.show()
