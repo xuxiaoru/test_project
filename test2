@@ -17,3 +17,18 @@ G.add_edge(3, 4, weight=1.0)
 
 # 输出图的信息
 print(nx.info(G))
+
+
+
+import matplotlib.pyplot as plt
+from networkx.drawing.nx_agraph import graphviz_layout
+
+# 使用 Graphviz 的层次布局（dot 格式）
+pos = graphviz_layout(G, prog="dot")
+
+# 绘制图形
+nx.draw(G, pos, with_labels=True, node_size=2000, node_color='lightblue', font_size=10, font_weight='bold')
+nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['weight'] for u, v, d in G.edges(data=True)})
+
+plt.title("嵌套的流程关系图")
+plt.show()
