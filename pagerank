@@ -1,0 +1,19 @@
+// 创建图数据
+CREATE (:Person {name: 'Alice'})-[:KNOWS]->(:Person {name: 'Bob'}),
+       (:Person {name: 'Bob'})-[:KNOWS]->(:Person {name: 'Carol'}),
+       (:Person {name: 'Alice'})-[:KNOWS]->(:Person {name: 'David'}),
+       (:Person {name: 'David'})-[:KNOWS]->(:Person {name: 'Bob'});
+
+// 运行 PageRank 算法
+CALL gds.pageRank.stream({
+  nodeProjection: 'Person',
+  relationshipProjection: {
+    KNOWS: {
+      type: 'KNOWS',
+      orientation: 'UNDIRECTED'
+    }
+  }
+})
+YIELD nodeId, score
+RETURN gds.util.asNode(nodeId).name AS name, score
+ORDER BY score DESC
