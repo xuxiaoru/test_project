@@ -1,0 +1,28 @@
+import networkx as nx
+
+# 创建一个有向图
+G = nx.DiGraph()
+
+# 添加节点和边
+G.add_edges_from([
+    ("A", "B"), ("B", "C"), ("C", "D"), ("A", "D"), ("D", "E"), ("E", "F")
+])
+
+# 1. 试算路径查找：检查是否存在从A到F的路径
+if nx.has_path(G, "A", "F"):
+    path = nx.shortest_path(G, source="A", target="F")
+    print("Path from A to F:", path)
+else:
+    print("No path from A to F")
+
+# 2. 试算节点度数：计算每个节点的入度和出度
+for node in G.nodes:
+    in_degree = G.in_degree(node)
+    out_degree = G.out_degree(node)
+    print(f"Node {node}: In-degree = {in_degree}, Out-degree = {out_degree}")
+
+# 3. 试算图的连通性：检查图是否是强连通图
+if nx.is_strongly_connected(G):
+    print("The graph is strongly connected")
+else:
+    print("The graph is not strongly connected")
