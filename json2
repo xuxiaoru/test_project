@@ -1,0 +1,61 @@
+下面是一个使用 **Flask** 来处理 JSON 请求并返回 JSON 响应的完整示例。Flask 可以通过 `request` 对象来获取客户端发送的 JSON 数据，并通过 `jsonify` 方法返回 JSON 响应。
+
+### Flask 代码示例：
+
+```python
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# 定义一个路由来处理 JSON 请求
+@app.route('/json', methods=['POST'])
+def json_example():
+    # 从请求体中获取 JSON 数据
+    data = request.get_json()
+
+    # 解析 JSON 中的数据
+    name = data.get('name')
+    age = data.get('age')
+    city = data.get('city')
+
+    # 构造要返回的 JSON 数据
+    response = {
+        "message": f"Hello {name} from {city}!",
+        "age_next_year": age + 1  # 假设返回明年的年龄
+    }
+
+    # 返回 JSON 响应
+    return jsonify(response)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+### 代码说明：
+1. **`request.get_json()`**：获取客户端发送的 JSON 请求体并将其解析为 Python 字典。
+2. **`jsonify(response)`**：将 Python 字典转换为 JSON 并作为响应返回给客户端。
+3. **路由 `/json`**：定义了一个用于接收 `POST` 请求的路由。
+
+### 测试步骤：
+1. 启动 Flask 应用程序。
+2. 使用 Postman、curl 或其他 HTTP 客户端工具发送 `POST` 请求，并在请求体中包含 JSON 数据。
+
+### 使用 curl 发送请求的示例：
+
+```bash
+curl -X POST http://127.0.0.1:5000/json \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Alice", "age": 25, "city": "New York"}'
+```
+
+### 示例响应：
+```json
+{
+  "message": "Hello Alice from New York!",
+  "age_next_year": 26
+}
+```
+
+### 解释：
+- **请求数据**：`{"name": "Alice", "age": 25, "city": "New York"}`
+- **响应数据**：服务器返回一个 JSON，内容是对接收到的数据的处理结果
