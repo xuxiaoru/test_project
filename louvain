@@ -1,0 +1,90 @@
+**Louvain 算法**是一种用于社群检测（社区发现）的算法，旨在通过最大化图的模块度（Modularity）来发现图中节点的社群。它是目前最流行的社群检测算法之一，尤其适用于大规模图数据。
+
+Louvain 算法的工作原理是逐步将节点合并成社区，并通过优化模块度来确保这些社区的质量。算法分为两个主要阶段：
+1. **局部移动阶段**：每个节点会尝试移动到邻居的社区，以最大化模块度的增量。
+2. **社区聚合阶段**：将已经找到的社区视为单个节点，重复第一阶段，直到模块度无法进一步提升。
+
+### Louvain 算法的步骤
+1. **初始化**：每个节点都视为一个单独的社区。
+2. **局部优化**：节点尝试加入邻居节点所在的社区，以增加模块度。
+3. **重新构建图**：将每个社区看作单个节点，重新构建一个较小的图，重复局部优化。
+4. **迭代**：重复上述步骤，直到模块度不再显著提升。
+
+### Louvain 算法的例子（使用 Neo4j 和 GDS 库）
+
+在 Neo4j 中，你可以通过图数据科学库（GDS，Graph Data Science Library）运行 Louvain 社群检测算法。以下是一个具体的例子，展示如何在 Neo4j 中运行 Louvain 算法。
+
+#### 1. 创建一个图数据
+假设你有一个图数据集，节点表示人，边表示他们之间的关系。你可以先通过 Cypher 创建一个简单的社交网络图：
+
+```cypher
+CREATE (:Person {name: 'Alice'})-[:KNOWS]->(:Person {name: 'Bob'}),
+       (:Person {name: 'Bob'})-[:KNOWS]->(:Person {name: 'Carol'}),
+       (:Person {name: 'Carol'})-[:KNOWS]->(:Person {name: 'David'}),
+       (:Person {name: 'David'})-[:KNOWS]->(:Person {name: 'Eve'}),
+       (:Person {name: 'Eve'})-[:KNOWS]->(:Person {name: 'Frank'}),
+       (:Person {name: 'Frank'})-[:KNOWS]->(:Person {name: 'Alice'}),
+       (:Person {name: 'Alice'})-[:KNOWS]->(:Person {name: 'Carol'}),
+       (:Person {name: 'Bob'})-[:KNOWS]->(:Person {name: 'David'}),
+       (:Person {name: 'Eve'})-[:KNOWS]->(:Person {name: 'Frank'});
+```
+
+这个图表示 6 个人之间的“认识”关系。
+
+#### 2. 使用 Louvain 算法检测社区
+接下来，我们可以使用 Neo4j 的图数据科学库来运行 Louvain 算法，并检测社群。
+
+首先，我们需要加载图，然后运行 Louvain 算法：
+
+```cypher
+// 将图加载到内存中
+CALL gds.graph.project(
+  'myGraph',         // 图的名称
+  'Person',          // 节点标签
+  'KNOWS'            // 边的类型
+);
+
+// 运行 Louvain 社群检测算法
+CALL gds.louvain.stream('myGraph')
+YIELD nodeId, communityId
+RETURN gds.util.asNode(nodeId).name AS person, communityId
+ORDER BY communityId ASC;
+```
+
+### 3. 结果解释
+`gds.louvain.stream` 会返回每个节点（人）和他们所属的社区（`communityId`）。`communityId` 相同的节点表示它们属于同一个社群。
+
+### 4. 示例输出
+
+假设上面的图运行了 Louvain 社群检测，可能的结果是：
+
+| person | communityId |
+|--------|-------------|
+| Alice  | 1           |
+| Bob    | 1           |
+| Carol  | 1           |
+| David  | 2           |
+| Eve    | 2           |
+| Frank  | 2           |
+
+从结果中可以看到，Alice、Bob 和 Carol 被划分为一个社群（`communityId = 1`），而 David、Eve 和 Frank 被划分为另一个社群（`communityId = 2`）。
+
+### 5. 算法优化
+Louvain 算法是一个近似算法，实际应用中它通过最大化**模块度**来优化社群划分。模块度是一个衡量图中节点群体之间连接密度的指标。模块度越高，社群划分的质量就越好。
+
+#### Neo4j GDS Louvain 相关的可选参数
+- **maxIterations**：设置最大迭代次数。
+- **minCommunitySize**：设置社区的最小大小。
+- **weightProperty**：如果图的边有权重属性，可以指定权重属性来加权计算社群。
+
+例如，设置最大迭代次数为 10，可以这样运行：
+
+```cypher
+CALL gds.louvain.stream('myGraph', { maxIterations: 10 })
+YIELD nodeId, communityId
+RETURN gds.util.asNode(nodeId).name AS person, communityId
+ORDER BY communityId ASC;
+```
+
+### 总结
+Louvain 算法通过优化图的模块度来发现社群，特别适合在大规模图数据中应用。通过 Neo4j 的 GDS 库，我们可以轻松地加载图数据并运行 Louvain 社群检测算法，从而识别出图中的社群。
