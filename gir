@@ -1,0 +1,60 @@
+要将代码提交到 Git 远程仓库，通常需要遵循以下步骤：
+
+### 1. 初始化本地 Git 仓库
+如果还没有初始化本地 Git 仓库，可以在项目根目录运行以下命令：
+
+```bash
+git init
+```
+
+### 2. 添加远程仓库地址
+添加远程仓库（例如 GitHub 或 GitLab）的地址。假设远程仓库的 URL 为 `https://github.com/user/repo.git`：
+
+```bash
+git remote add origin https://github.com/user/repo.git
+```
+
+### 3. 添加文件到暂存区
+将项目中的文件添加到暂存区：
+
+```bash
+git add .
+```
+
+或者可以只添加某个特定文件：
+
+```bash
+git add <file_name>
+```
+
+### 4. 提交文件到本地仓库
+将添加的文件提交到本地 Git 仓库，并附带提交说明：
+
+```bash
+git commit -m "提交说明"
+```
+
+### 5. 将本地提交推送到远程仓库
+将本地的提交推送到远程仓库的指定分支。默认情况下，通常推送到 `main` 或 `master` 分支：
+
+```bash
+git push origin main
+```
+
+如果你的仓库使用的是 `master` 分支，可以将 `main` 替换为 `master`：
+
+```bash
+git push origin master
+```
+
+### 6. 如果遇到身份验证问题
+推送时，可能会要求输入远程仓库的用户名和密码。如果你使用的是 GitHub，建议使用 SSH 密钥或生成一个 **个人访问令牌** (Personal Access Token) 来代替密码。
+
+### 总结
+- 初始化仓库：`git init`
+- 关联远程仓库：`git remote add origin <远程仓库地址>`
+- 添加文件：`git add .`
+- 提交更改：`git commit -m "提交说明"`
+- 推送代码：`git push origin main`
+
+这就是将代码提交到 Git 远程仓库的基本步骤。
