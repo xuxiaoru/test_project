@@ -1,0 +1,51 @@
+环境变量：
+1、huggingface-cli 下载来源（国内镜像）：
+setx HF_ENDPOINT="https://hf-mirror.com"
+export HF_ENDPOINT="https://hf-mirror.com"
+export HF_DATASETS_S3_HOST="https://hf-mirror.com/datasets"
+2、huggingface-cli 下载保存默认路径：
+无特殊设置 ，
+保存在C:\Users\xuxiaoru.cache\huggingface\hub、/root/.cache/huggingface/hub
+更改：setx HF_HOME="D:\git\hugging_face"  、export HF_HOME="/home/hycan/HDD1/data/xxr_data/huggingface"下载模型保存在访目录的hub文件夹
+3、模型加载默认路径
+无特殊设置，从C:\Users\xuxiaoru.cache\huggingface\hub加载
+更改：setx TRANSFORMERS_CACHE="D:\git\hugging_face\hub"  
+export TRANSFORMERS_CACHE=/home/hycan/HDD1/data/xxr_data/huggingface/hub
+更改和huggingface-cli路径相同
+
+下载模型方式 ：
+1、huggingface-cli download  （从国内镜像）
+cmd ： 
+huggingface-cli download --resume-download google-bert/bert-base-uncased  ，下载到默认路径
+huggingface-cli download --resume-download google-bert/bert-base-uncased --local-dir D:\git\hugging_face ，下载到指定路径，并且默认路径会生成链接字符串
+huggingface-cli download --resume-download meta-llama/Meta-Llama-3-8B-Instruct --include "original/*" --token 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  ，加token
+
+2、huggingface-cli login 登陆（要梯子，有时不用梯子，看情况）
+cmd : huggingface-cli login --token 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
+或jupyter: from huggingface_hub import login
+login('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')
+
+然后，使用hugging face 标准加载方式
+
+/home/hycan/HDD1/data/jupyter/root/xuxr/transformers/08-transformers_solution/models--hfl--chinese-macbert-large/snapshots/
+/home/hycan/HDD1/data/jupyter/root/xuxr/transformers/08-transformers_solution/hfl/chinese-macbert-large
+/home/hycan/HDD1/data/jupyter/root/xuxr/transformers/08-transformers_solution/models--hfl--chinese-macbert-large/snapshots/1cf2677c782975600ce58e2961656b1b29eddbae/ /home/hycan/HDD1/data/jupyter/root/xuxr/transformers/08-transformers_solution/chinese-macbert-large/1cf2677c782975600ce58e2961656b1b29eddbae/.  /home/hycan/HDD1/data/jupyter/root/xuxr/transformers/08-transformers_solution/chinese-macbert-large/
+huggingface-cli download --resume-download --repo_type dataset predibase/glue-sst2 --cache-dir /home/hycan/HDD1/data/jupyter/root/xuxr/LLM/05_RoBERTa/datasets
+predibase/glue_sst2
+huggingface-cli download --resume-download --repo-type dataset lavita/medical-qa-shared-task-v1-toy
+huggingface-cli download --repo-type dataset --resume-download wikitext
+huggingface-cli download --resume-download hfl/chinese-macbert-large --cache-dir /home/hycan/HDD1/data/jupyter/root/xuxr/transformers/08-transformers_solution
+huggingface-cli download --resume-download  hfl/rbt3 --cache-dir /home/hycan/HDD1/data/jupyter/root/xuxr/transformers/08-transformers_solution
+huggingface-cli download --resume-download --repo-type dataset yahma/alpaca-cleaned
+lavita/medical-qa-shared-task-v1-toy --cache-dir /home/hycan/HDD1/data/jupyter/root/xuxr/LLM/05_RoBERTa/datasets
+/home/hycan/HDD1/data/jupyter/root/xuxr/transformers/08-transformers_solution/
+Qwen/Qwen2-7B-Instruct
+hfl/rbt3
+huggingface-cli download --resume-download  hfl/rbt3 --local-dir-use-symlinks False --cache-dir /home/hycan/HDD1/data/jupyter/root/xuxr/transformers/08-transformers_solution
+/root/.cache/huggingface/hub/
+/home/hycan/HDD1/data/jupyter/root/xuxr/transformers/08-transformers_solution
+/home/hycan/HDD1/data/xxr_data/huggingface/hub
+
+下载到指定文件夹，并且取消软链接：
+huggingface-cli download --resume-download Langboat/mengzi-t5-base --local-dir /home/hycan/HDD1/data/jupyter/root/xuxr/transformers/models/mengzi-t5-base --local-dir-use-symlinks False
+（包含）--include "*.safetensors"  （排除）--exclude "*.bin,*.h5"
